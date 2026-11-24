@@ -1,0 +1,21 @@
+{
+  "tag": "exit",
+  "protocol": "trojan",
+  "settings": {
+    "password": "test@password:example",
+    "address": "grpc.example.test",
+    "port": 18443
+  },
+  "streamSettings": {
+    "network": "grpc",
+    "security": "tls",
+    "grpcSettings": {
+      "serviceName": "example",
+      "authority": "grpc-authority.example.test",
+      "multiMode": true
+    },
+    "tlsSettings": {
+      "serverName": "example.test"
+    }
+  }
+}

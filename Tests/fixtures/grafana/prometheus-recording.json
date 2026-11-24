@@ -1,0 +1,38 @@
+{
+  "source": "https://github.com/grafana/grafana/issues/43827",
+  "results": {
+    "A": {
+      "frames": [
+        {
+          "schema": {
+            "refId": "A",
+            "meta": {"custom": {"resultType": "matrix"}},
+            "fields": [
+              {"name": "Time", "type": "time", "typeInfo": {"frame": "time.Time"}},
+              {
+                "name": "Value",
+                "type": "number",
+                "typeInfo": {"frame": "float64", "nullable": true},
+                "labels": {"khaleesi_health": "dead", "khaleesi_service": "backgate"}
+              }
+            ]
+          },
+          "data": {"values": [[1641642510000, 1641646110000], [0, 0]]}
+        },
+        {
+          "schema": {
+            "name": "exemplar",
+            "refId": "A",
+            "meta": {"custom": {"resultType": "exemplar"}},
+            "fields": [
+              {"name": "Time", "type": "time"},
+              {"name": "Value", "type": "number"}
+            ]
+          },
+          "data": {"values": [[], []]}
+        }
+      ],
+      "refId": "A"
+    }
+  }
+}

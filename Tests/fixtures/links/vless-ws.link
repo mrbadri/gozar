@@ -1,0 +1,1 @@
+vless://12345678-1234-4234-8234-123456789abc@ws.example.test:18443?type=ws&security=tls&sni=example.test&fp=safari&alpn=h2%2Chttp%2F1.1&host=app.example.test&path=%2Fweb%3Fkeep%3Da%2Bb#WS%20TLS

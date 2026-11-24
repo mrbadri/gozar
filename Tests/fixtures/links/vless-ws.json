@@ -1,0 +1,26 @@
+{
+  "tag": "exit",
+  "protocol": "vless",
+  "settings": {
+    "id": "12345678-1234-4234-8234-123456789abc",
+    "encryption": "none",
+    "address": "ws.example.test",
+    "port": 18443
+  },
+  "streamSettings": {
+    "network": "ws",
+    "security": "tls",
+    "wsSettings": {
+      "path": "/web?keep=a+b",
+      "host": "app.example.test"
+    },
+    "tlsSettings": {
+      "serverName": "example.test",
+      "fingerprint": "safari",
+      "alpn": [
+        "h2",
+        "http/1.1"
+      ]
+    }
+  }
+}

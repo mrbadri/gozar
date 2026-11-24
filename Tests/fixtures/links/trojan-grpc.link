@@ -1,0 +1,1 @@
+trojan://test%40password%3Aexample@grpc.example.test:18443?security=tls&sni=example.test&type=grpc&serviceName=example&host=grpc-authority.example.test&mode=multi#Trojan

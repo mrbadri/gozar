@@ -1,0 +1,14 @@
+{
+  "tag": "exit",
+  "protocol": "shadowsocks",
+  "settings": {
+    "method": "aes-256-gcm",
+    "password": "test:pass",
+    "address": "ss.example.test",
+    "port": 18443
+  },
+  "streamSettings": {
+    "network": "tcp",
+    "security": "none"
+  }
+}

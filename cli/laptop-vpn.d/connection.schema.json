@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "laptop-vpn connection",
+  "description": "How `vpn on` connects. The relay password is not here: it lives in the macOS Keychain (service vpnuser-relay); `vpn forget` clears it. Apply with: vpn apply (reconnects if the tunnel is up).",
+  "type": "object",
+  "required": [
+    "relay"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "relay": {
+      "type": "object",
+      "required": [
+        "host",
+        "port",
+        "user"
+      ],
+      "additionalProperties": false,
+      "description": "The SSH relay on relay that forwards to the egress box (docs/PHONE-VPN.md).",
+      "properties": {
+        "host": {
+          "type": "string",
+          "description": "relay's public address."
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "The relay's SSH port."
+        },
+        "user": {
+          "type": "string",
+          "description": "The account on the egress box (phone_vpn_user)."
+        }
+      }
+    },
+    "local_socks_port": {
+      "type": "integer",
+      "minimum": 1024,
+      "maximum": 65535,
+      "default": 1080,
+      "description": "Where the local SOCKS proxy listens; the system proxy points here."
+    },
+    "router": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "When enabled, vpn-router owns the local SOCKS port and SSH uses upstream_port. Both router ports must differ from local_socks_port and from each other.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "upstream_port": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 65535,
+          "default": 1081
+        },
+        "control_port": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 65535,
+          "default": 1090
+        }
+      }
+    },
+    "keepalive": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A dead connection is noticed after interval_seconds × max_missed and redialled.",
+      "properties": {
+        "interval_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 5
+        },
+        "max_missed": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 3
+        }
+      }
+    },
+    "connect_timeout_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 15
+    },
+    "reconnect_delay_seconds": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 3,
+      "description": "Pause before redialling after the tunnel drops."
+    },
+    "ciphers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "SSH ciphers, in order of preference."
+    },
+    "_guide": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "How to write this file. Kept up to date by `vpn` itself — edits here are overwritten."
+    }
+  }
+}

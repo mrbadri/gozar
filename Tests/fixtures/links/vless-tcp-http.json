@@ -1,0 +1,31 @@
+{
+  "tag": "exit",
+  "protocol": "vless",
+  "settings": {
+    "id": "12345678-1234-4234-8234-123456789abc",
+    "encryption": "none",
+    "address": "tcp.example.test",
+    "port": 18443
+  },
+  "streamSettings": {
+    "network": "tcp",
+    "security": "none",
+    "tcpSettings": {
+      "header": {
+        "type": "http",
+        "request": {
+          "path": [
+            "/one",
+            "/two"
+          ],
+          "headers": {
+            "Host": [
+              "front.example.test",
+              "other.example.test"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

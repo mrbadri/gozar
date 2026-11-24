@@ -1,0 +1,100 @@
+#compdef vpn
+# Tab completion for `vpn` (cli/laptop-vpn.sh). Install once, then open a new terminal:
+#   ln -sf <path-to-gozar>/cli/laptop-vpn.d/_vpn ~/.oh-my-zsh/custom/completions/_vpn
+# (any directory on $fpath before compinit works; `vpn completion` does this for you)
+
+# The domains and hosts already in routes.json, for unset / check / set.
+_vpn_sites() {
+  local -a sites
+  sites=(${(f)"$(vpn _sites 2>/dev/null)"})
+  _wanted sites expl 'site in routes.json' compadd -a sites
+}
+
+_vpn() {
+  local -a cmds
+  cmds=(
+    'on:connect and turn the system proxy on'
+    'off:restore the proxy and disconnect'
+    'status:tunnel, exit IP, Cisco (same as plain vpn)'
+    'config:edit routes.json (or conn / paths), check it, apply it'
+    'apply:check both files and apply them'
+    'routes:every rule and where it goes right now'
+    'exits:list servers and subscriptions'
+    'exit:add, choose, rename, remove or test a server'
+    'sub:add, refresh or remove a subscription'
+    'set:send sites through vpn, cisco or direct'
+    'unset:drop sites from the rules (they go through the VPN)'
+    'check:which way a site goes, and by which rule'
+    'domains:find the domains a site uses (--add to add them)'
+    'docs:open the guide (Persian)'
+    'watch:live: sites going through the VPN'
+    'top:busiest sites through the VPN'
+    'try:exit through another box, to test it'
+    'reset-hostkey:after the exit box was replaced'
+    'forget:remove the saved password from Keychain'
+    'completion:install this tab completion'
+    'help:every command explained (Persian)'
+  )
+  if (( CURRENT == 2 )); then
+    _describe -t commands 'vpn command' cmds
+    return
+  fi
+  case $words[2] in
+    exits)
+      _arguments '--json[print JSON]'
+      ;;
+    exit)
+      if (( CURRENT == 3 )); then
+        _values 'action' 'add[add a server link]' 'use[choose a server]' 'test[test servers]' \
+          'rename[rename a server]' 'rm[remove a server]'
+      elif [[ $words[3] == test ]]; then
+        _arguments '--all[test every exit]' '--seconds[download time limit]:seconds:' '--json[print JSON]'
+      elif [[ $words[3] == add ]]; then
+        _arguments '--name[use this server name]:name:' '--json[print JSON]'
+      else
+        _arguments '--json[print JSON]'
+      fi
+      ;;
+    sub)
+      if (( CURRENT == 3 )); then
+        _values 'action' 'add[add a subscription URL]' 'update[refresh subscriptions]' 'rm[remove a subscription]'
+      elif [[ $words[3] == add ]]; then
+        _arguments '--name[use this subscription name]:name:' '--json[print JSON]'
+      else
+        _arguments '--json[print JSON]'
+      fi
+      ;;
+    config|edit)
+      (( CURRENT == 3 )) && _values 'file' \
+        'routes[routes.json: which site goes where]' \
+        'conn[connection.json: how to connect]' \
+        'paths[print where the files are]'
+      ;;
+    set)
+      if (( CURRENT == 3 )); then
+        _vpn_sites
+      else
+        _alternative \
+          'routes:route:((vpn\:"through our VPN" cisco\:"through Cisco while it is connected" direct\:"never through our VPN"))' \
+          'sites:site:_vpn_sites'
+      fi
+      ;;
+    unset|rm|check)
+      _vpn_sites
+      ;;
+    domains|find)
+      _arguments \
+        '1:site:(youtube telegram google github instagram twitter netflix spotify openai anthropic discord whatsapp linkedin twitch)' \
+        '--add[add the suggested domains with this route]:route:((vpn\:"through our VPN" cisco\:"through Cisco" direct\:"never through our VPN"))' \
+        '--name[rule to add them to]:rule name:' \
+        '--all[also add what Chrome saw beyond the list, shared hosts too]' \
+        '--quick[only the community list, without Chrome]' \
+        '--seconds[how long Chrome lets the page run]:seconds:(10 15 30)'
+      ;;
+    docs|guide|doc)
+      (( CURRENT == 3 )) && _values 'open as' 'md[the Markdown file, in VS Code]'
+      ;;
+  esac
+}
+
+_vpn "$@"

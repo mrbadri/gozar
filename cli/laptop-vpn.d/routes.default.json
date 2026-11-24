@@ -1,0 +1,40 @@
+{
+  "$schema": "routes.schema.json",
+  "rules": [
+    {
+      "name": "Company agents",
+      "route": "cisco",
+      "note": "The company's EndpointGuard and endpoint-manager (MDM) agents ask the proxy for their servers by bare names the VPN's exit can't resolve. Keep them on Cisco / the office network.",
+      "hosts": ["corp-agent-ser", "corp-agent-server", "corp-mgmt01", "CORP-MGMT01"]
+    },
+    {
+      "name": "Company",
+      "route": "cisco",
+      "without_cisco": "direct",
+      "domains": ["company.example", "corp.example.net", "shop.example"]
+    },
+    {
+      "name": "Claude",
+      "route": "cisco",
+      "without_cisco": "vpn",
+      "note": "Through Cisco when it is connected; without Cisco, Claude refuses Iranian IPs, so it goes through the VPN.",
+      "domains": ["claude.ai", "claude.com", "anthropic.com", "claudeusercontent.com"]
+    },
+    {
+      "name": "Iranian sites",
+      "route": "direct",
+      "note": "Banks, payment gateways and government sites often refuse foreign IPs, and Iranian sites are faster without the VPN. 'ir' means every .ir domain.",
+      "domains": [
+        "ir",
+        "aparat.com", "filimo.com", "torob.com", "zarinpal.com", "sheypoor.com",
+        "varzesh3.com", "basalam.com", "jabama.com", "eitaa.com", "bale.ai", "bale.sh"
+      ]
+    },
+    {
+      "name": "YouTube",
+      "route": "vpn",
+      "note": "Everything not listed goes through the VPN anyway; this rule only documents it.",
+      "domains": ["youtube.com", "googlevideo.com", "ytimg.com", "ggpht.com"]
+    }
+  ]
+}

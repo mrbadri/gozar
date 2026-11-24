@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "laptop-vpn routes",
+  "description": "Which sites go through the VPN, through Cisco, or straight out. Anything not listed goes through the VPN. Apply with: vpn apply",
+  "type": "object",
+  "required": ["rules"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "_guide": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "How to write this file. Kept up to date by `vpn` itself — edits here are overwritten."
+    },
+    "rules": {
+      "type": "array",
+      "description": "Your rules. Ctrl+Space inside the list inserts a new one.",
+      "defaultSnippets": [
+        {
+          "label": "New rule: domains",
+          "description": "A group of sites and the way they go",
+          "body": { "name": "$1", "route": "^\"${2|vpn,cisco,direct|}\"", "domains": ["$3"] }
+        },
+        {
+          "label": "New rule: Cisco, VPN without Cisco (like Claude)",
+          "body": { "name": "$1", "route": "cisco", "without_cisco": "vpn", "domains": ["$2"] }
+        },
+        {
+          "label": "New rule: company machine names (hosts)",
+          "body": { "name": "$1", "route": "cisco", "hosts": ["$2"] }
+        }
+      ],
+      "items": {
+        "type": "object",
+        "required": ["name", "route"],
+        "additionalProperties": false,
+        "anyOf": [{ "required": ["domains"] }, { "required": ["hosts"] }],
+        "properties": {
+          "name": { "type": "string", "description": "A label for you; shown by `vpn routes` and `vpn check`." },
+          "route": {
+            "enum": ["vpn", "cisco", "direct"],
+            "enumDescriptions": [
+              "Through our VPN (the default for anything not listed)",
+              "Through Cisco while it is connected; without Cisco, see without_cisco",
+              "Never through our VPN (while Cisco is connected, Cisco still carries it)"
+            ],
+            "description": "vpn | cisco | direct"
+          },
+          "without_cisco": {
+            "enum": ["direct", "vpn"],
+            "default": "direct",
+            "enumDescriptions": ["The normal internet (default)", "Our VPN — for sites that refuse Iranian IPs, like Claude"],
+            "description": "Only with \"route\": \"cisco\": where these sites go while Cisco is not connected."
+          },
+          "enabled": { "type": "boolean", "default": true, "description": "false = this rule is off, without deleting it." },
+          "note": { "type": "string", "description": "Free text, for you (JSON has no comments)." },
+          "domains": {
+            "type": "array",
+            "description": "\"youtube.com\" = it and all subdomains · \"*.company.example\" = only subdomains · \"*.ir\" or \"ir\" = every .ir domain. A full URL also works; it is cleaned to the name.",
+            "items": {
+              "type": "string",
+              "pattern": "^(\\*\\.|\\.)?[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.?$|://",
+              "examples": ["youtube.com", "*.company.example", "*.ir"]
+            }
+          },
+          "hosts": {
+            "type": "array",
+            "description": "Exact names, not their subdomains: company machine names (corp-mgmt01), IP addresses, ranges (10.0.0.0/8).",
+            "items": { "type": "string", "pattern": "^[A-Za-z0-9.*/:_-]+$", "examples": ["corp-mgmt01", "192.168.1.5", "10.0.0.0/8"] }
+          }
+        }
+      }
+    }
+  }
+}

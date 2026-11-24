@@ -1,0 +1,27 @@
+{
+  "tag": "exit",
+  "protocol": "vmess",
+  "settings": {
+    "id": "12345678-1234-4234-8234-123456789abc",
+    "alterId": 0,
+    "security": "auto",
+    "address": "vmess.example.test",
+    "port": 18443
+  },
+  "streamSettings": {
+    "network": "ws",
+    "security": "tls",
+    "wsSettings": {
+      "path": "/ws?ed=2048",
+      "host": "edge.example.test"
+    },
+    "tlsSettings": {
+      "serverName": "vmess.example.test",
+      "fingerprint": "chrome",
+      "alpn": [
+        "h2",
+        "http/1.1"
+      ]
+    }
+  }
+}

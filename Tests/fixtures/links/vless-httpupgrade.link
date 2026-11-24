@@ -1,0 +1,1 @@
+vless://12345678-1234-4234-8234-123456789abc@upgrade.example.test:18443?type=httpupgrade&host=front.example.test&path=%2Fupgrade

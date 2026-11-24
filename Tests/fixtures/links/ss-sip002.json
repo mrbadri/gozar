@@ -1,0 +1,14 @@
+{
+  "tag": "exit",
+  "protocol": "shadowsocks",
+  "settings": {
+    "method": "chacha20-ietf-poly1305",
+    "password": "fixture-password",
+    "address": "ss.example.test",
+    "port": 18443
+  },
+  "streamSettings": {
+    "network": "tcp",
+    "security": "none"
+  }
+}

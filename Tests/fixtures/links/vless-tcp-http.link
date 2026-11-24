@@ -1,0 +1,1 @@
+vless://12345678-1234-4234-8234-123456789abc@tcp.example.test:18443?type=tcp&headerType=http&host=front.example.test%2Cother.example.test&path=%2Fone%2C%2Ftwo
